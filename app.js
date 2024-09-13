@@ -1,7 +1,12 @@
-const mongoose=require('mongoose')
+import mongoose from "mongoose";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { test } from "./Backend/Controlers/alumno.controller.js";
 
-const urlbd="mongodb://localhost:27017/UTMA"
-mongoose.connect(urlbd)
+dotenv.config();
+
+mongoose.connect(process.env.urlbd)  
 .then(()=>{
     console.log("Funciona la conexión a la bd")
 })
@@ -10,22 +15,16 @@ mongoose.connect(urlbd)
     console.log("No funciona la conexión a la bd", error)
 })
 
-const EsquemaAlumnos = new mongoose.Schema({
-    name:{
-        type:String
-    },
-    apepat:{
-        type:String
-    },
-    edad:{
-        type:Number
-    }
+
+//generar servidor local
+const app=express();
+
+//para darle seguridad al servidor local
+app.use(cors())
+
+//el servidor corre del puerto 4000 al 5000
+app.listen(4000, ()=>{
+    console.log("Se escucha correctamente el servidor")
 })
 
-const modeloAlumnos = new mongoose.model("Tabla de alumnos", EsquemaAlumnos)
-
-modeloAlumnos.create({
-    name:"Salma",
-    apepat:"Padilla",
-    edad:20
-})
+test()
